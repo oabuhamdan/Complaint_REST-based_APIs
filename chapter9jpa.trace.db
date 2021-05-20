@@ -1,0 +1,6 @@
+2021-05-18 19:07:09 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "ARTISTS" not found; SQL statement:
+INSERT INTO ARTISTS (ID, NAME) VALUES (1, 'Threadbare Loaf') [42102-199]
+2021-05-18 19:07:29 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "ARTISTS" not found; SQL statement:
+INSERT INTO ARTISTS (ID, NAME) VALUES (1, 'Threadbare Loaf') [42102-199]

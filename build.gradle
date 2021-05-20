@@ -1,0 +1,43 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version "2.1.4.RELEASE"
+}
+
+apply plugin:'java'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+version '1.0-SNAPSHOT'
+
+ext {
+    springFrameworkVersion = "5.1.5.RELEASE"
+    jacksonVersion = "2.9.9"
+    testNgVersion = "6.14.3"
+}
+
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'org.springframework.boot'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation "com.h2database:h2:1.4.199"
+    implementation "org.springframework.boot:spring-boot-starter-data-jpa"
+    implementation 'org.springframework.boot:spring-boot-starter-data-rest'
+    implementation "org.springframework.boot:spring-boot-starter-web"
+    implementation "org.springframework.boot:spring-boot-starter-security"
+    implementation "org.springframework.boot:spring-boot-starter-thymeleaf"
+
+    implementation "com.fasterxml.jackson.core:jackson-annotations:$jacksonVersion"
+
+
+    compileOnly "org.projectlombok:lombok:1.+"
+    annotationProcessor "org.projectlombok:lombok"
+}
+
+test {
+    useTestNG()
+}
