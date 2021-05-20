@@ -1,7 +1,6 @@
 package com.pwc.assignment.security;
 
 import com.pwc.assignment.data.entities.User;
-import com.pwc.assignment.data.records.UserRecord;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
