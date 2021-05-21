@@ -43,4 +43,8 @@ public class ComplaintServiceImpl implements ComplaintService {
     public List<Complaint> getAllUserComplaints(String username) {
         return complaintRepository.findAllByUser(userService.getUser(username));
     }
+
+    public List<Complaint> getAllComplaints() {
+        return complaintRepository.findAll();
+    }
 }

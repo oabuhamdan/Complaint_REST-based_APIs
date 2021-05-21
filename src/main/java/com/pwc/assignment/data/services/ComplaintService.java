@@ -6,11 +6,13 @@ import com.pwc.assignment.data.entities.ComplaintStatus;
 import java.util.List;
 
 public interface ComplaintService {
-    List<Complaint> getUserComplaintsByStatus(String userId, ComplaintStatus status);
+    List<Complaint> getUserComplaintsByStatus(String username, ComplaintStatus status);
 
     void changeComplaintStatusById(String complaintId, ComplaintStatus newStatus);
 
     List<Complaint> getAllUserComplaints(String username);
+
+    List<Complaint> getAllComplaints();
 
     Complaint getComplaintById(String complaintId);
 
