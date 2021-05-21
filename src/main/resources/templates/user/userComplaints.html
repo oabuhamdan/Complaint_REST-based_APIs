@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css"
+          integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" rel="stylesheet">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script crossorigin="anonymous"
+            integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
+    <title>My Complaints</title>
+</head>
+<body>
+<nav class="navbar navbar-light bg-light">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/">Home</a>
+    </div>
+</nav>
+<div class="container">
+    <div>
+        <h2>My Complaints Page</h2>
+        <hr>
+    </div>
+    <div>
+        <br/>
+        <select aria-label="Filter By Status" class="form-select" id="filterByStatus">
+            <option selected value="">Filter By Status</option>
+            <option value="PENDING_RESOLUTION">PENDING_RESOLUTION</option>
+            <option value="RESOLVED">RESOLVED</option>
+            <option value="DISMISSED">DISMISSED</option>
+        </select>
+        <table class="table text-center">
+            <thead>
+            <tr>
+                <th class="text-center" scope="col">#</th>
+                <th class="text-center" scope="col">Text</th>
+                <th class="text-center" scope="col">Status</th>
+            </tr>
+            </thead>
+            <tbody id="table_body">
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        getUserComplaints()
+    });
+
+    $('#filterByStatus').on('change', function () {
+            $('#table_body').empty();
+            let filter = $('#filterByStatus').val()
+            if (filter)
+                getUserComplaints(filter);
+        }
+    );
+
+    function getUserComplaints(filter) {
+        $.ajax({
+            url: "/getCurrentUserComplaints",
+            data: {'status': filter},
+            type: "GET",
+            success: function (json) {
+                let length = json.length;
+                if (length > 0)
+                    for (let i = 0; i < length; i++) {
+                        let row = $('<tr>');
+                        let num_col = $('<td>').text(i + 1);
+                        let text_col = $('<td>').text(json[i]['text']);
+                        let status_col = $('<td>').text(json[i]['status']);
+                        $(row).append(num_col, text_col, status_col)
+                        $('#table_body').append(row)
+                    } else {
+                    let row = $('<tr>');
+                    let col = $('<td>').attr('colspan', 3).text('No results found');
+                    $(row).append(col)
+                    $('#table_body').append(row)
+                }
+            },
+            error: function () {
+                alert("Failed")
+            }
+        });
+    }
+</script>
+</body>
+</html>
