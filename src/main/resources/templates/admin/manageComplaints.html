@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css"
+          integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" rel="stylesheet">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script crossorigin="anonymous"
+            integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
+    <title>Manage Complaints</title>
+</head>
+<body>
+<nav class="navbar navbar-light bg-light">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/">Home</a>
+    </div>
+</nav>
+<div class="container">
+    <div>
+        <h2>Manage Complaints Page</h2>
+        <hr>
+    </div>
+    <div>
+        <br/>
+        <select aria-label="Filter By User" class="form-select" id="filterByUser">
+            <option selected value="">Filter By User</option>
+        </select>
+        <table class="table text-center">
+            <thead>
+            <tr>
+                <th class="text-center" scope="col">#</th>
+                <th class="text-center" scope="col">User</th>
+                <th class="text-center" scope="col">Text</th>
+                <th class="text-center" scope="col">Status</th>
+            </tr>
+            </thead>
+            <tbody id="table_body">
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        getUserComplaints();
+        fillUsersToUsersFilter();
+    });
+
+    $('#filterByUser').on('change', function () {
+            $('#table_body').empty();
+            let filter = $('#filterByUser').val()
+            if (filter === "") filter = undefined
+            getUserComplaints(filter);
+        }
+    );
+
+    function fillUsersToUsersFilter() {
+        $.ajax({
+            url: "/admin/listAllUsers",
+            type: "GET",
+            success: function (json) {
+                let length = json.length;
+                if (length > 0)
+                    for (let i = 0; i < length; i++) {
+                        let option = $('<option>').attr('value', json[i]['username']).text(json[i]['name']);
+                        $('#filterByUser').append(option)
+                    }
+            },
+            error: function () {
+                alert("Error while retrieving users")
+            }
+        });
+    }
+
+    function getUserComplaints(username) {
+        $.ajax({
+            url: "/admin/listComplaints",
+            data: {'username': username},
+            type: "GET",
+            success: function (json) {
+                let length = json.length;
+                if (length > 0)
+                    for (let i = 0; i < length; i++) {
+                        let row = $('<tr>');
+                        let num_col = $('<td>').text(i + 1);
+                        let user_col = $('<td>').text(json[i]['user']['name']);
+                        let text_col = $('<td>').text(json[i]['text']);
+                        let status_col = $('<td>').text(json[i]['status']);
+                        $(row).append(num_col, user_col, text_col, status_col)
+                        $('#table_body').append(row)
+                    } else {
+                    let row = $('<tr>');
+                    let col = $('<td>').attr('colspan', 3).text('No results found');
+                    $(row).append(col)
+                    $('#table_body').append(row)
+                }
+            },
+            error: function () {
+                alert("Failed")
+            }
+        });
+    }
+</script>
+</body>
+</html>
