@@ -49,27 +49,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/login", "/register", "/")
-                .permitAll()
-                .antMatchers("/").hasAuthority("USER")
-                .anyRequest()
-                .authenticated()
+                .antMatchers("/login", "/register", "/").permitAll()
+                .antMatchers("/admin/**").hasAuthority("ADMIN")
+                .anyRequest().authenticated()
                 .and()
-                .userDetailsService(customUserDetailsService)
                 //Login configurations
-                .exceptionHandling()
-                .accessDeniedPage("/403")
-                .and()
                 .formLogin().defaultSuccessUrl("/")
                 .loginPage("/login")
-                .failureUrl("/login?error=true")
                 //Logout configurations
                 .and()
-                .logout()
-                .logoutSuccessUrl("/");
+                .logout().logoutSuccessUrl("/");
 
-
-        http.authorizeRequests().antMatchers("/admin/**").hasAuthority("ROLE_ADMIN");
         http.csrf().disable().headers().frameOptions().disable();
     }
 }
