@@ -1,30 +1,30 @@
 package com.pwc.assignment.data.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.pwc.assignment.data.records.ComplaintRecord;
-import lombok.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 @Entity
 @Data
 @NoArgsConstructor
 @RequiredArgsConstructor
-@Table(indexes = {
-        @Index(
-                name = "user_complaint",
-                columnList = "user_id,status,text",
-                unique = true
-        )
-})
 public class Complaint implements ComplaintRecord {
-    @Id @GeneratedValue(generator="system-uuid")
-    @GenericGenerator(name="system-uuid", strategy = "uuid")
+    @Id
+    @GeneratedValue(generator = "system-uuid")
+    @GenericGenerator(name = "system-uuid", strategy = "uuid")
     String id;
     @ManyToOne
     @NonNull
-    @JsonIgnore
+    @JsonIgnoreProperties({"complaints", "password", "authority"})
     User user;
     @NonNull
     ComplaintStatus status;
