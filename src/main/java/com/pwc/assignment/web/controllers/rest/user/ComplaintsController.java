@@ -20,16 +20,11 @@ public class ComplaintsController {
     @Autowired
     ComplaintService complaintService;
 
-    @GetMapping(path = "/getComplainStatus")
-    public ResponseEntity<ComplaintStatus> getComplainStatus(@RequestParam String complaintId) {
-        return ResponseEntity.status(HttpStatus.OK).body(complaintService.getComplaintById(complaintId).getStatus());
-    }
-
     @GetMapping(path = "/getCurrentUserComplaints")
     public List<Complaint> getCurrentUserComplaints(@RequestParam(required = false) String status) {
         String currentUserName = Utils.getLoggedInUsername();
         if (status != null) {
-            return complaintService.getUserComplaintsByStatus(currentUserName, ComplaintStatus.ofString(status));
+            return complaintService.getUserComplaintsByStatus(currentUserName, ComplaintStatus.valueOf(status));
         }
         return complaintService.getAllUserComplaints(currentUserName);
     }
