@@ -10,9 +10,9 @@
     <title>Manage Complaints</title>
 </head>
 <body>
-<nav class="navbar navbar-light bg-light">
+<nav class="navbar navbar-dark bg-secondary">
     <div class="container-fluid">
-        <a class="navbar-brand" href="/">Home</a>
+        <a class="navbar-brand" href="/admin">Admin Home</a>
     </div>
 </nav>
 <div class="container">
@@ -31,7 +31,8 @@
                 <th class="text-center" scope="col">#</th>
                 <th class="text-center" scope="col">User</th>
                 <th class="text-center" scope="col">Text</th>
-                <th class="text-center" scope="col">Status</th>
+                <th class="text-center" scope="col">Current Status</th>
+                <th class="text-center" scope="col">Change Status</th>
             </tr>
             </thead>
             <tbody id="table_body">
@@ -85,7 +86,10 @@
                         let user_col = $('<td>').text(json[i]['user']['name']);
                         let text_col = $('<td>').text(json[i]['text']);
                         let status_col = $('<td>').text(json[i]['status']);
-                        $(row).append(num_col, user_col, text_col, status_col)
+                        let change_stats_col = $('<select>').attr('id', json[i]['id']).attr('class', 'form-select form-select-sm')
+                            .attr('onchange', 'changeComplaintStatus(event)')
+                        appendOptionsToComplaintChangeStatus(change_stats_col, json[i]['status'])
+                        $(row).append(num_col, user_col, text_col, status_col, change_stats_col)
                         $('#table_body').append(row)
                     } else {
                     let row = $('<tr>');
@@ -93,6 +97,30 @@
                     $(row).append(col)
                     $('#table_body').append(row)
                 }
+            },
+            error: function () {
+                alert("Failed")
+            }
+        });
+    }
+
+    function appendOptionsToComplaintChangeStatus(change_stats_col, currentStatus) {
+        let option1 = $('<option>').attr('value', 'PENDING_RESOLUTION').text('PENDING_RESOLUTION');
+        let option2 = $('<option>').attr('value', 'RESOLVED').text('RESOLVED');
+        let option3 = $('<option>').attr('value', 'DISMISSED').text('DISMISSED');
+        change_stats_col.append(option1, option2, option3).children('option[value="' + currentStatus + '"]').attr('selected', 'selected')
+    }
+
+    function changeComplaintStatus(event) {
+        let id = event.target.id
+        let new_status = event.target.selectedOptions[0].value
+        $.ajax({
+            url: "/admin/changeComplaintStatus",
+            data: {'complaintId': id, 'newStatus': new_status},
+            type: "POST",
+            success: function () {
+                alert('Success')
+                event.target.parentElement.children[3].innerHTML = new_status
             },
             error: function () {
                 alert("Failed")
