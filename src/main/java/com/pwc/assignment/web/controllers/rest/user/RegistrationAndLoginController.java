@@ -9,7 +9,9 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.IOException;
 
 @RestController
 public class RegistrationAndLoginController {
@@ -17,8 +19,9 @@ public class RegistrationAndLoginController {
     UserService userService;
 
     @PostMapping(path = "/register", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-    public void register(@Valid UserDto user) {
+    public void register(@Valid UserDto user, HttpServletResponse response) throws IOException {
         userService.registerUser(user);
+        response.sendRedirect("/login");
     }
 
     @PostMapping(path = "/login", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
