@@ -24,8 +24,8 @@ public class AdminActionsController {
     ComplaintService complaintService;
 
     @PostMapping(path = "/changeUserRole")
-    public ResponseEntity<HttpStatus> changeUserRole(@RequestParam String userName, @RequestParam String newRole) {
-        userService.changeUserAuthority(userName, UserRoles.valueOf(newRole));
+    public ResponseEntity<HttpStatus> changeUserRole(@RequestParam String username, @RequestParam String newRole) {
+        userService.changeUserAuthority(username, UserRoles.valueOf(newRole));
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
