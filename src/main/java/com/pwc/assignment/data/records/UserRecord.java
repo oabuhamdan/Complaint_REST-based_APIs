@@ -4,7 +4,7 @@ import com.pwc.assignment.data.entities.Complaint;
 
 import java.util.List;
 
-public interface UserRecord extends BaseRecord {
+public interface UserRecord {
     String getName();
 
     void setName(String name);
