@@ -10,7 +10,7 @@
     <title>My Complaints</title>
 </head>
 <body>
-<nav class="navbar navbar-light bg-light">
+<nav class="navbar navbar-dark bg-secondary">
     <div class="container-fluid">
         <a class="navbar-brand" href="/">Home</a>
     </div>
@@ -49,8 +49,8 @@
     $('#filterByStatus').on('change', function () {
             $('#table_body').empty();
             let filter = $('#filterByStatus').val()
-            if (filter)
-                getUserComplaints(filter);
+            if (filter === "") filter = undefined
+            getUserComplaints(filter);
         }
     );
 
