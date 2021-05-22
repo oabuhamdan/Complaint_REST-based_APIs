@@ -21,7 +21,7 @@ public class ComplaintServiceImpl implements ComplaintService {
     UserService userService;
 
     public List<Complaint> getUserComplaintsByStatus(String username, ComplaintStatus status) {
-        return complaintRepository.findAllByUser(userService.getUser(username)).stream()
+        return complaintRepository.findAllByUser_username(username).stream()
                 .filter(c -> c.getStatus() == status)
                 .collect(Collectors.toList());
     }
@@ -37,11 +37,14 @@ public class ComplaintServiceImpl implements ComplaintService {
     }
 
     public void changeComplaintStatusById(String complaintId, ComplaintStatus newStatus) {
-        complaintRepository.findById(complaintId).ifPresent(c -> c.setStatus(newStatus));
+        complaintRepository.findById(complaintId).ifPresent(c -> {
+            c.setStatus(newStatus);
+            complaintRepository.save(c);
+        });
     }
 
     public List<Complaint> getAllUserComplaints(String username) {
-        return complaintRepository.findAllByUser(userService.getUser(username));
+        return complaintRepository.findAllByUser_username(username);
     }
 
     public List<Complaint> getAllComplaints() {

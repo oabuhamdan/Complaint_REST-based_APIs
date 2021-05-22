@@ -52,11 +52,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public void changeUserAuthority(String username, UserRoles newRole) {
         Optional<User> user = userRepository.findByUsername(username);
-        if (user.isPresent()) {
-            user.get().setAuthority(newRole);
-        } else {
-            throw new RuntimeException("Invalid username.");
-        }
+        user.map(u -> {
+            u.setAuthority(newRole);
+            return userRepository.save(u);
+        }).orElseThrow(() -> new RuntimeException("Invalid username."));
     }
 
     @Override
